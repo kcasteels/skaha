@@ -10,7 +10,7 @@ from pathlib import Path
 week_sec=604800
 month_sec=30*24*60*60
 unix_time=int(time.time())
-timespan=unix_time-week_sec
+timespan=unix_time-month_sec
 
 
 df = pd.read_csv('podstats.csv')
