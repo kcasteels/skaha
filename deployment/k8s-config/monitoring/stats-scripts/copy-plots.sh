@@ -5,20 +5,21 @@
 pod=$(kubectl -n skaha-system get pods --no-headers -o custom-columns=":metadata.name" | grep arc-tomcat | head -n 1)
 
 
-arcpath='/cephfs/cavern/home'
-localpath='/home/casteels/stats/pods/plots'
+arcpath=/cephfs/cavern/home
+basepath=/home/casteels/stats/pods
+plotpath=$basepath/plots
 
 
 
 #Generate user list:
-ls -1 $localpath/ | sed 's/-stats//g' > users.txt
+ls -1 $plotpath/ | sed 's/-stats//g' > $basepath/users.txt
 
 #Loop through users:
 while read u; do
 
 	echo $u
 
-	cat > $localpath/$u-stats/$u-stats.html <<-EOFMarker
+	cat > $plotpath/$u-stats/$u-stats.html <<-EOFMarker
 <!DOCTYPE html>
 <html>
 <head>
@@ -118,6 +119,6 @@ while read u; do
 </html>
 EOFMarker
 	
-	kubectl -n skaha-system cp $localpath/$u-stats $pod:$arcpath/$u/.
+	kubectl -n skaha-system cp $plotpath/$u-stats $pod:$arcpath/$u/.
 
-done < users.txt
+done < $basepath/users.txt
