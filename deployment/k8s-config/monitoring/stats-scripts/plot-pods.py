@@ -13,7 +13,7 @@ unix_time=int(time.time())
 timespan=unix_time-week_sec
 
 
-df = pd.read_csv('podstats.csv')
+df = pd.read_csv('/home/casteels/stats/pods/podstats.csv')
 
 #users=pd.read_csv('test-users.txt')
 users=pd.DataFrame(df['Username'].unique(), columns =['Username']) 
@@ -300,5 +300,3 @@ for index, row in users.iterrows():
 	plt.ylim(0,1)
 	plt.savefig(path+user+"-interactive-load.png",bbox_inches="tight")
 	plt.close()
-
-
