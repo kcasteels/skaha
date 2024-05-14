@@ -12,8 +12,9 @@ month_sec=30*24*60*60
 unix_time=int(time.time())
 timespan=unix_time-week_sec
 
+basepath='/home/casteels/stats/pods/'
 
-df = pd.read_csv('/home/casteels/stats/pods/podstats.csv')
+df = pd.read_csv(basepath+'podstats.csv')
 
 #users=pd.read_csv('test-users.txt')
 users=pd.DataFrame(df['Username'].unique(), columns =['Username']) 
@@ -152,7 +153,7 @@ for index, row in users.iterrows():
 	#ud['Date'] = pd.to_datetime(ud.iloc[:,0], unit='s')
 
 
-	path='plots/'+user+'-stats/img/'
+	path=basepath+'plots/'+user+'-stats/img/'
 	Path(path).mkdir(parents=True, exist_ok=True)
 
 	shutil.copyfile('combined-cpu.png', path+'combined-cpu.png')
@@ -300,3 +301,4 @@ for index, row in users.iterrows():
 	plt.ylim(0,1)
 	plt.savefig(path+user+"-interactive-load.png",bbox_inches="tight")
 	plt.close()
+
