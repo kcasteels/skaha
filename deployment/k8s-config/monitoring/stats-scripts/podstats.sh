@@ -61,7 +61,6 @@ while read line; do
 	
 done < $path/loadpods.out
 
-python3 /home/casteels/stats/pods/plot-pods.py
+/bin/python3 $path/plot-pods.py > $path/plot.log
 
-sh /home/casteels/stats/pods/copy-plots.sh
-
+/bin/sh $path/copy-plots.sh > $path/copy.log
