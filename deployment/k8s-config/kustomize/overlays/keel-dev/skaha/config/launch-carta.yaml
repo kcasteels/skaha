@@ -20,6 +20,7 @@ spec:
         canfar-net-userid: "${skaha.userid}"
         job-name: "${skaha.jobname}"
     spec:
+      automountServiceAccountToken: false
       enableServiceLinks: false
       restartPolicy: OnFailure
       ${skaha.schedulegpu}
@@ -30,7 +31,7 @@ spec:
         runAsGroup: ${skaha.posixid}
         fsGroup: ${skaha.posixid}
         supplementalGroups: [${skaha.supgroups}]
-      priorityClassName: uber-user-significant
+      priorityClassName: uber-user-preempt-medium
       hostname: "${software.hostname}"
       containers:
       - name: "${skaha.jobname}"
@@ -41,6 +42,12 @@ spec:
           value: "${skaha.userid}"
         - name: skaha_sessionid
           value: "${skaha.sessionid}"
+        - name: HOME
+          value: "/arc/home/${skaha.userid}"
+        - name: PWD
+          value: "/arc/home/${skaha.userid}"
+        - name: OMP_NUM_THREADS
+          value: "${software.requests.cores}"
         securityContext:
           allowPrivilegeEscalation: false
         image: ${software.imageid}
@@ -84,7 +91,7 @@ spec:
           path: /volumes/_nogroup/dcd994bc-c0d4-4557-9fbf-28fc4ef5969e
           user: kanfarnetes_dev
           secretRef:
-            name: cephfs-cephx-key
+            name: cephfs-cephx-user-key
           readOnly: false          
       - name: scratch-dir
         emptyDir: {}

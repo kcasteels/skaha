@@ -24,7 +24,7 @@ spec:
                 operator: DoesNotExist
       containers:
       - name: arc-tomcat
-        image: images.canfar.net/skaha-system/cavern:0.4.9
+        image: images.opencadc.org/platform/cavern:0.7.6
         imagePullPolicy: Always
         resources:
           requests:
@@ -44,9 +44,6 @@ spec:
           name: cavern-ceph-volume
         - mountPath: "/config"
           name: config-volume
-        - mountPath: /var/lib/sss/pipes
-          name: sssd-dir
-          readOnly: true
       securityContext:
         runAsUser: 0
       priorityClassName: uber-user-preempt-high
@@ -65,12 +62,8 @@ spec:
           path: /volumes/_nogroup/054e398e-a08e-425e-9f7c-fc394362e38e
           user: keel_prod
           secretRef:
-            name: cephfs-cephx-key
+            name: cephfs-cephx-admin-key
           readOnly: false
       - name: config-volume
         configMap:
           name: arc-config
-      - name: sssd-dir
-        hostPath:
-          path: /var/lib/ubernetes
-          type: Directory

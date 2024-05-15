@@ -12,8 +12,7 @@
 
 ## CANFAR Science Portal Documentation
 
-User documentation for the CANFAR Science Portal and Platform can be found here:  [Science Portal Documentation](https://github.com/opencadc/science-containers/blob/main/doc)
-Additional documentation for new users can be found here: [New User Documentation](https://canfar-scienceportal.readthedocs.io/en/latest/)
+User documentation for the CANFAR Science Portal and Platform can be found here:  [Official CANFAR Science Platform Documentation](https://www.opencadc.org/science-containers/)
 
 ## Acknowledgements
 This project has been funded in part by:
@@ -22,11 +21,18 @@ This project has been funded in part by:
 - The National Research Council Canada
 
 ## Overview
+
+![science-platform-architecture](canfar-architecture-2024-04-08.png)
+
 skaha is a general purpose online platform for running science containers interactively.  It is part of the CANFAR science platform for containers.  In the architecture diagram below, skaha is the main API to the Science Platform.
 
 ![canfar-architecture](canfar-architecture-1.0.png)
 
 The CANFAR Science Platform Architecture.  Skaha is the API to the Science Platform box.
+
+## Helm Installation
+
+Deploying the Skaha service is made up of a small number of Helm installations.  See the [Deployment Guide](./deployment/helm/README.md) for installations.
 
 ## System Components
 

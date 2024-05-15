@@ -21,6 +21,7 @@ spec:
         canfar-net-userid: "${skaha.userid}"
         job-name: "${skaha.jobname}"
     spec:
+      automountServiceAccountToken: false
       enableServiceLinks: false
       restartPolicy: Never
       ${skaha.schedulegpu}
@@ -32,6 +33,7 @@ spec:
         runAsGroup: ${skaha.posixid}
         fsGroup: ${skaha.posixid}
         supplementalGroups: [${skaha.supgroups}]
+      ${headless.priority}
       containers:
       - name: "${skaha.jobname}"
         # image and start of the 'env' label comes from the image bundle
@@ -46,6 +48,8 @@ spec:
           value: "/arc/home/${skaha.userid}"
         - name: PWD
           value: "/arc/home/${skaha.userid}"
+        - name: OMP_NUM_THREADS
+          value: "${software.requests.cores}"
         securityContext:
           allowPrivilegeEscalation: false
         workingDir: "/arc/home/${skaha.userid}"
@@ -80,7 +84,7 @@ spec:
           path: /volumes/_nogroup/054e398e-a08e-425e-9f7c-fc394362e38e
           user: keel_prod
           secretRef:
-            name: cephfs-cephx-key
+            name: cephfs-cephx-user-key
           readOnly: false
       - name: scratch-dir
         emptyDir: {}

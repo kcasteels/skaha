@@ -20,6 +20,7 @@ spec:
         canfar-net-userid: "${skaha.userid}"
         job-name: "${skaha.jobname}"
     spec:
+      automountServiceAccountToken: false
       enableServiceLinks: false
       restartPolicy: OnFailure
       ${skaha.schedulegpu}
@@ -30,7 +31,7 @@ spec:
         runAsGroup: ${skaha.posixid}
         fsGroup: ${skaha.posixid}
         supplementalGroups: [${skaha.supgroups}]
-      priorityClassName: uber-user-significant
+      priorityClassName: uber-user-preempt-medium
       hostname: "${software.hostname}"
       containers:
       - name: "${skaha.jobname}"
@@ -41,12 +42,18 @@ spec:
           value: "${skaha.userid}"
         - name: skaha_sessionid
           value: "${skaha.sessionid}"
+        - name: HOME
+          value: "/arc/home/${skaha.userid}"
+        - name: PWD
+          value: "/arc/home/${skaha.userid}"
+        - name: OMP_NUM_THREADS
+          value: "${software.requests.cores}"
         securityContext:
           allowPrivilegeEscalation: false
         image: ${software.imageid}
         command: ["/bin/sh", "-c"]
         args:
-        - /carta/skaha-carta /arc /arc/projects
+        - /skaha-system/skaha-carta.sh /arc /arc/projects
         imagePullPolicy: Always
         resources:
           requests:
@@ -65,6 +72,8 @@ spec:
           protocol: TCP
           name: frontend-port
         volumeMounts:
+        - mountPath: "/skaha-system"
+          name: start-carta
         - mountPath: "/arc"
           name: cavern-volume
           subPath: "cavern"
@@ -84,10 +93,14 @@ spec:
           path: /volumes/_nogroup/054e398e-a08e-425e-9f7c-fc394362e38e
           user: keel_prod
           secretRef:
-            name: cephfs-cephx-key
+            name: cephfs-cephx-user-key
           readOnly: false          
       - name: scratch-dir
         emptyDir: {}
+      - name: start-carta
+        configMap:
+          name: start-carta
+          defaultMode: 0777
       - name: sssd-dir
         hostPath:
           path: /var/lib/ubernetes
